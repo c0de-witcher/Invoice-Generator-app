@@ -77,7 +77,15 @@ fun InvoiceInfo(
 
 
     Scaffold (
-        topBar = { TopBar3(navController = navController,sharedPrefference,detail_to_save)},
+        topBar = {
+                 TopBar(
+                     navController = navController,
+                     Title = "Inovice Info",
+                     nav_Icon = Icons.Filled.ArrowBack,
+                     action_Icon = Icons.Filled.Check
+                 ) {
+                     navController.navigate("create_new_invoice")
+                 }},
         containerColor = mydellWhite
     ){
 
@@ -233,7 +241,6 @@ fun invoiceNumberInput(
     OutlinedTextField(value = viewModel.CheckValue_For_TextField(invo),
         onValueChange = {
         viewModel.onDataChange(invo,it.toString(),detail_to_save)
-        Log.i("shivam",viewModel.Invoice_Title.value)
     },
         singleLine = true, modifier = Modifier
             // .border(1.dp, myGrey, RoundedCornerShape(5.dp))

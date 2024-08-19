@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -30,7 +31,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -59,7 +59,15 @@ fun New_Item(
                 action_Icon = Icons.Filled.Check
             ) {
                 Log.i("shivam",viewModel.itemList1.size.toString())
-                viewModel.addItemInList(viewModel.Item_Name.value,viewModel.Item_Quantity.value,viewModel.Item_Price.value,viewModel.Amount.value)
+
+                viewModel.addItemInList(viewModel.Item_Name.value,
+                    viewModel.Item_Quantity.value,
+                    viewModel.Item_Price.value,
+                    viewModel.Amount.value,
+                    viewModel.Unit_of_Measure.value,
+                    viewModel.Discount.value,
+                    viewModel.Tax_Rate.value)
+
                 viewModel.Item_Name.value = ""
                 viewModel.Item_Quantity.value = "1"
                 viewModel.Item_Price.value = "0"
@@ -179,7 +187,9 @@ fun listLayout(
     price: String,
     qunantiy: String,
     total: String,
-    index: Int
+    index: Int,
+    viewModel: ViewModel1,
+    navController: NavHostController
 ) {
     Surface(modifier = Modifier
         .padding(start = 15.dp, end = 15.dp, top = 7.dp)
@@ -189,6 +199,7 @@ fun listLayout(
             RoundedCornerShape(5.dp)
         )
         .clip(RoundedCornerShape(5.dp))
+        .clickable { navController.navigate("listItem/$index") }
         .fillMaxWidth(),
         color = mydellWhite) {
         Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(10.dp)) {

@@ -143,7 +143,7 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
             }
 
             viewModel.itemList1.forEachIndexed { index, itemList ->
-                listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,index)
+                listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,index,viewModel,navController)
             }
 
 

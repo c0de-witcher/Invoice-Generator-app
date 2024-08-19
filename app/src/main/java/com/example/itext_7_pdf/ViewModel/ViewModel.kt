@@ -41,11 +41,49 @@ class ViewModel1: ViewModel() {
     var Amount = mutableStateOf("0.00")
     var itemList1 = arrayListOf<itemList>()
 
+    var Edit_Item_Name = mutableStateOf("")
+    var Edit_Item_Price = mutableStateOf("0")
+    var Edit_Item_Quantity = mutableStateOf("1")
+    var Edit_Unit_of_Measure = mutableStateOf("")
+    var Edit_Discount = mutableStateOf("0")
+    var Edit_Tax_Rate = mutableStateOf("0")
+    var Edit_Amount = mutableStateOf("0.00")
 
 
 
-    fun addItemInList( itemName : String, Qunantiy : String, price : String, total : String){
-        itemList1.add(itemList(itemName,Qunantiy,price,total))
+
+
+    fun asign_value_to_Edit_Item_list(index : Int){
+        Edit_Item_Name.value = itemList1[index].itemName
+        Edit_Item_Price.value = itemList1[index].price
+        Edit_Item_Quantity.value = itemList1[index].Qunantiy
+        Edit_Unit_of_Measure.value = itemList1[index].unit_of_Measure
+        Edit_Discount.value = itemList1[index].Discount
+        Edit_Tax_Rate.value = itemList1[index].Tax_Rate
+        Edit_Amount.value = itemList1[index].total
+    }
+
+    fun Edit_Cal_Amount(): String{
+
+        Edit_Amount.value =  CheckNull(Edit_Item_Price.value,Edit_Item_Quantity.value,Edit_Discount.value,Edit_Tax_Rate.value)
+
+        return Edit_Amount.value
+    }
+
+    fun replace_item_in_list(index: Int){
+        Log.i("shivam","before ${itemList1.size} index $index")
+        itemList1.removeAt(index)
+        itemList1.add(index,itemList(Edit_Item_Name.value,Edit_Item_Quantity.value,Edit_Item_Price.value,Edit_Amount.value,Edit_Unit_of_Measure.value,Edit_Discount.value,Edit_Tax_Rate.value))
+        Log.i("shivam","after ${itemList1.size}")
+    }
+
+
+
+
+
+
+    fun addItemInList( itemName : String, Qunantiy : String, price : String, total : String,unit_of_Measure:String,discount : String,tax_Rate : String){
+        itemList1.add(itemList(itemName,Qunantiy,price,total, unit_of_Measure ,discount,tax_Rate))
     }
 
 
@@ -54,17 +92,19 @@ class ViewModel1: ViewModel() {
 
     fun Cal_Amount(): String{
 
-        CheckNull(Item_Price.value,Item_Quantity.value,Discount.value,Tax_Rate.value)
+        Amount.value = CheckNull(Item_Price.value,Item_Quantity.value,Discount.value,Tax_Rate.value)
 
         return Amount.value
     }
 
-    fun CheckNull(value: String, value1: String, value2: String, value3: String) {
+    fun CheckNull(value: String, value1: String, value2: String, value3: String) : String {
         var v1 = if (value.isEmpty())"1" else value
         var v2  = if (value1.isEmpty())"1" else value1
         var v3  = if (value2.isEmpty())"0" else value2
         var v4  = if (value3.isEmpty())"0" else value3
-        Amount.value = ( v1.toDouble()*v2.toDouble() - v3.toDouble()+ v4.toDouble()).toString()
+        val local_amount= ( v1.toDouble()*v2.toDouble() - v3.toDouble()+ v4.toDouble()).toString()
+
+        return local_amount
 
 
     }
@@ -92,19 +132,24 @@ class ViewModel1: ViewModel() {
             "Client_Shipping_Address_1"-> {Client_Shipping_Address_1.value =newData}
             "Client_Shipping_Address_2"-> {Client_Shipping_Address_2.value =newData}
             "Item_Name" -> {Item_Name.value = newData}
-            "Item_Price" -> {Item_Price.value = newData
-            Log.i("shivam","old ${Item_Price.value} and new $newData")}
+            "Item_Price" -> {Item_Price.value = newData }
             "Item_Quantity" -> {Item_Quantity.value = newData}
             "Unit_of_Measure" -> {Unit_of_Measure.value = newData}
             "Discount" -> {Discount.value = newData}
             "Tax_Amount" -> {Tax_Rate.value = newData}
+            "Edit_Item_Name" -> {Edit_Item_Name.value = newData}
+            "Edit_Item_Price" -> {Edit_Item_Price.value = newData}
+            "Edit_Item_Quantity" -> {Edit_Item_Quantity.value = newData}
+            "Edit_Unit_of_Measure" -> {Edit_Unit_of_Measure.value = newData}
+            "Edit_Discount" -> {Edit_Discount.value = newData}
+            "Edit_Tax_Rate" -> {Edit_Tax_Rate.value = newData}
+            "Edit_Amount" -> {Edit_Amount.value = newData}
 
 
 
         }
     }
     var re  = mutableStateOf("")
-    var reInt = mutableStateOf<Int>(0)
     fun CheckValue_For_TextField(invo: String) : String{
 
 
@@ -134,6 +179,13 @@ class ViewModel1: ViewModel() {
             "Unit_of_Measure" -> {re = Unit_of_Measure}
             "Discount" -> {re = Discount}
             "Tax_Amount" -> {re = Tax_Rate}
+            "Edit_Item_Name" -> { re = Edit_Item_Name}
+            "Edit_Item_Price" -> { re = Edit_Item_Price}
+            "Edit_Item_Quantity" -> { re = Edit_Item_Quantity}
+            "Edit_Unit_of_Measure" -> { re = Edit_Unit_of_Measure}
+            "Edit_Discount" -> { re = Edit_Discount}
+            "Edit_Tax_Rate" -> { re = Edit_Tax_Rate}
+            "Edit_Amount" -> { re = Edit_Amount}
 
 
 
