@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -31,9 +32,14 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -77,7 +83,7 @@ fun PageLayout(
     navController: NavHostController,
     viewModel: ViewModel1,
     sharedPrefference: SharedPrefference,
-    detail_to_save: invoice_info_Details
+    detail_to_save: invoice_info_Details,
 ) {
     Scaffold (
         containerColor = mydellWhite,
@@ -124,7 +130,7 @@ fun lastMessage(navController: NavHostController, viewModel: ViewModel1) {
 }
 
 @Composable
-fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewModel1,) {
+fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewModel1) {
     Card (modifier = Modifier
         .fillMaxWidth()
         .padding(top = 10.dp, bottom = 60.dp),
@@ -136,7 +142,7 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
         )
 
         ) {
-        Column (){
+        Column {
             Row (modifier, verticalAlignment = Alignment.CenterVertically){
                 Image(painter = painterResource(id = R.drawable.online_shopping), contentDescription = " Items")
                 Text(text = "Items", color = mytextColor, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 15.dp), fontSize = 20.sp)
@@ -147,18 +153,20 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
             }
 
 
-            Surface (color = mydellWhite,shape = RoundedCornerShape(5.dp), modifier = modifier
-                .fillMaxWidth()
-                .border(
-                    1.dp, myGrey,
-                    RoundedCornerShape(5.dp)
-                )
-                .clip(RoundedCornerShape(5.dp))
-                .clickable { navController.navigate("NewItem") }, ){
-                Row (verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 10.dp, top = 5.dp, bottom = 5.dp)){
-                    Icon(imageVector = Icons.Filled.AddCircle, contentDescription = "add item", tint = mytextColor)
+            OutlinedButton(onClick = { navController.navigate("NewItem") },
+                shape = RoundedCornerShape(5.dp),
+                modifier = modifier,
+                contentPadding = PaddingValues(start = 10.dp, end = 15.dp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = mydellWhite
+                ),
+
+                ) {
+                Row(modifier = Modifier.fillMaxWidth()) {
+                    Icon(imageVector = Icons.Filled.AddCircle, contentDescription = "", tint = Color.Black)
                     Text(text = "Add Item", color = myfontGrey, modifier = Modifier.padding(start = 10.dp))
                 }
+
 
             }
 
@@ -171,7 +179,7 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
                     RoundedCornerShape(5.dp)
                 )
                 .clip(RoundedCornerShape(5.dp))
-                .clickable { }, ){
+            ){
                 Row (verticalAlignment = Alignment.CenterVertically,
                     modifier = Modifier.padding( top = 5.dp, bottom = 5.dp),
                     horizontalArrangement = Arrangement.SpaceBetween
@@ -184,42 +192,32 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
             }
 
 
-            Row (modifier = Modifier
-                .fillMaxWidth()
-                .clickable { }
-                .padding(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(painter = painterResource(id = R.drawable.flash_sale), contentDescription = "Dsicount")
-                    Text(text = "Discount", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 10.dp))
-                }
-                Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "Enter")
-
-            }
 
 
-            Row (modifier = Modifier
-                .fillMaxWidth()
-                .clickable { }
-                .padding(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(painter = painterResource(id = R.drawable.tax), contentDescription = "Tax")
-                    Text(text = "Tax", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 10.dp))
-                }
-                Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "Enter")
+            ooptions(
+                Title = "Discount",
+                image = R.drawable.flash_sale,
+                icon = Icons.Filled.KeyboardArrowRight,
+                true,
+                PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp)
+            )
 
-            }
 
-            Row (modifier = Modifier
-                .fillMaxWidth()
-                .clickable { }
-                .padding(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically){
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(painter = painterResource(id = R.drawable.fast_delivery), contentDescription = "dilvery")
-                    Text(text = "Discount", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 10.dp))
-                }
-                Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "Enter")
 
-            }
+            ooptions(Title = "Tax", image = R.drawable.tax, icon = Icons.Filled.KeyboardArrowRight,true,PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp))
+
+            ooptions(Title = "Shipping", image = R.drawable.fast_delivery, icon = Icons.Filled.KeyboardArrowRight,true,PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp))
+
+
+
+
+
+
+
+
+
+
+
 
 
             Row (modifier = Modifier
@@ -237,6 +235,62 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
     }
 }
 
+
+@Composable
+fun ooptions(Title :String , image : Int,icon : ImageVector,action_control : Boolean,paddingValues: PaddingValues){
+    var check by remember {
+        mutableStateOf(false)
+    }
+    Button(onClick = { check = true },modifier = Modifier
+        .fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent
+        ),
+        contentPadding = paddingValues,
+        shape = RoundedCornerShape(0.dp)
+
+    ) {
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Surface (color = Color.Transparent){
+                Image(painter = painterResource(id = image), contentDescription = "")
+                Text(text = Title, fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 40.dp), color = Color.Black)
+            }
+            if (action_control){
+                Icon(imageVector = icon, contentDescription = "Enter", tint = Color.Black, modifier = Modifier)
+            }
+        }
+    }
+
+    if (check){
+       check =  Dialog_Box(title = Title, check = check)
+    }
+}
+
+@Composable
+fun nav_ooptions(Title :String , image : Int,icon : ImageVector,action_control : Boolean,onClick : ()->Unit,paddingValues: PaddingValues){
+    Button(onClick = { onClick() },modifier = Modifier
+        .fillMaxWidth(),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = Color.Transparent
+        ),
+        contentPadding = paddingValues,
+        shape = RoundedCornerShape(0.dp)
+
+    ) {
+
+        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+            Surface (color = Color.Transparent){
+                Image(painter = painterResource(id = image), contentDescription = "")
+                Text(text = Title, fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 40.dp), color = Color.Black)
+            }
+            if (action_control){
+                Icon(imageVector = icon, contentDescription = "Enter", tint = Color.Black, modifier = Modifier)
+            }
+        }
+    }
+}
+
 @Composable
 fun info(navController: NavHostController, viewModel: ViewModel1) {
     Card(modifier = Modifier
@@ -251,35 +305,27 @@ fun info(navController: NavHostController, viewModel: ViewModel1) {
         shape = RoundedCornerShape(10.dp)
     ) {
         Column{
-            Row (modifier = Modifier
-                .fillMaxWidth()
-                .clickable { navController.navigate("Business_Info") }
-                .padding(15.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween){
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(painter = painterResource(id = R.drawable.sales), contentDescription = "Business" )
-                    Text(text = "Business Info", fontSize = 15.sp, modifier = Modifier.padding(start = 15.dp), fontWeight = FontWeight.Bold, color = mytextColor)
 
-                }
-                Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "enter")
+            nav_ooptions(
+                Title = "Business Info",
+                image = R.drawable.sales,
+                icon = Icons.Filled.KeyboardArrowRight,
+                action_control = true,
+                {
+                    navController.navigate("Business_Info")
+                },
+                PaddingValues(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
+            )
 
-                 }
+            nav_ooptions(
+                Title = "Client Info",
+                image = R.drawable.man,
+                icon = Icons.Filled.KeyboardArrowRight,
+                action_control = true,
+                onClick = {  navController.navigate("NewClient") },
+                paddingValues = PaddingValues(start = 15.dp, end = 15.dp, top = 10.dp, bottom = 10.dp)
+            )
 
-            Row (modifier = Modifier
-                .fillMaxWidth()
-                .clickable { navController.navigate("NewClient") }
-                .padding(15.dp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.SpaceBetween){
-                Row(verticalAlignment = Alignment.CenterVertically) {
-                    Image(painter = painterResource(id = R.drawable.man), contentDescription = "Client Info" )
-                    Text(text = "Client Info", fontSize = 15.sp, modifier = Modifier.padding(start = 15.dp), fontWeight = FontWeight.Bold, color = mytextColor)
-
-                }
-                Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "enter")
-
-            }
         }
 
     }
@@ -300,16 +346,14 @@ fun template(navController: NavHostController, viewModel: ViewModel1) {
         ),
         shape = RoundedCornerShape(10.dp),
     ){
-        Row (modifier = Modifier
-            .fillMaxWidth()
-            .clickable { }
-            .padding(15.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Image(painter = painterResource(id = R.drawable.templates), contentDescription = "Icon")
-                Text(text = "Templates", fontSize = 15.sp, color = mytextColor, modifier = Modifier.padding(start = 15.dp), fontWeight = FontWeight.Bold)
-            }
-            Icon(imageVector = Icons.Filled.KeyboardArrowRight, contentDescription = "enter")
-        }
+        nav_ooptions(
+            Title = "Templates",
+            image = R.drawable.templates,
+            icon = Icons.Filled.KeyboardArrowRight,
+            action_control = true,
+            onClick = { /*TODO*/ },
+            paddingValues = PaddingValues(15.dp)
+        )
 
     }
 }
