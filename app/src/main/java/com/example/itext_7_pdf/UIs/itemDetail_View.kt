@@ -2,11 +2,7 @@ package com.example.itext_7_pdf.UIs
 
 import android.annotation.SuppressLint
 import android.util.Log
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -30,8 +26,6 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -51,17 +45,34 @@ fun itemDetail_View(
     navController: NavHostController,
     viewModel: ViewModel1,
     index: String?,
-    detail_to_save: invoice_info_Details
+    detail_to_save: invoice_info_Details,
 ) {
     Scaffold (
         topBar = {
             TopBar_two_action(navController = navController, Title = "Edit Item", nav_Icon = Icons.Filled.ArrowBack,
-            action_Icon = Icons.Outlined.Delete, {
-            viewModel.itemList1.removeAt(index!!.toInt())
-            navController.navigate("create_new_invoice")
-            Log.i("shivam","$index")
+            action_Icon = Icons.Outlined.Delete,
+                {
+                    navController.navigate("create_new_invoice")
+                    if (index != null) {
+                        viewModel.itemList1.removeAt(index.toInt())
+                    }
 
-        },Icons.Filled.Check,{
+
+
+
+                        /* if ( index!!.toInt() == 0){
+                        Log.i("shivam ","index $index and size of list  remove ${viewModel.itemList1.size}")
+                        Log.i("shivam ","index $index and item ${viewModel.itemList1[0]}")
+                        viewModel.itemList1.removeAt(0)
+                        Log.i("shivam ","index $index and item ${viewModel.itemList1[0]}")
+
+                       // viewModel.itemList1.removeAt(index!!.toInt())
+                    }*/
+
+
+
+        },Icons.Filled.Check,
+                {
             viewModel.replace_item_in_list(index!!.toInt())
 
 
@@ -199,7 +210,6 @@ fun Edit_List_View(
 
     OutlinedTextField(value = viewModel.CheckValue_For_TextField(key), onValueChange = {
         viewModel.onDataChange(key,it.toString(),detail_to_save)
-        Log.i("shivam",viewModel.Invoice_Title.value)
     },
         singleLine = true, modifier = Modifier
             .fillMaxWidth()
@@ -245,7 +255,9 @@ fun TopBar_two_action(
             }
         },
         actions = {
-            IconButton(onClick = { onClick_Action() }) {
+            IconButton(onClick = {
+                Log.i("shivam","delete click")
+                onClick_Action() }) {
                 Icon(imageVector = if (action_Icon == null){Icons.Outlined.Home} else {action_Icon}, contentDescription = "", tint = myWhite)
             }
 

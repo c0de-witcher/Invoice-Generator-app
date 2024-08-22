@@ -1,6 +1,7 @@
 package com.example.itext_7_pdf.UIs
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,7 +20,6 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
-import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -32,7 +32,6 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -107,7 +106,7 @@ fun PageLayout(
                InoiveNumber(navController,sharedPrefference,detail_to_save,viewModel)
                template(navController,viewModel)
                info(navController,viewModel)
-               items(Modifier.padding(15.dp),navController,viewModel)
+               items(Modifier.padding(15.dp),navController,viewModel,detail_to_save)
                lastMessage(navController,viewModel)
            }
 
@@ -130,7 +129,7 @@ fun lastMessage(navController: NavHostController, viewModel: ViewModel1) {
 }
 
 @Composable
-fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewModel1) {
+fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewModel1,detail_to_save: invoice_info_Details) {
     Card (modifier = Modifier
         .fillMaxWidth()
         .padding(top = 10.dp, bottom = 60.dp),
@@ -148,9 +147,20 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
                 Text(text = "Items", color = mytextColor, fontWeight = FontWeight.Bold, modifier = Modifier.padding(start = 15.dp), fontSize = 20.sp)
             }
 
-            viewModel.itemList1.forEachIndexed { index, itemList ->
-                listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,index,viewModel,navController)
-            }
+
+
+           if (viewModel.itemList1 != null){
+               viewModel.itemList1.forEachIndexed { index, itemList ->
+                   Log.i("shivam ","index $index")
+
+
+                   if (itemList != null) {
+                       listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,index,viewModel,navController,detail_to_save)
+                   }
+               }
+           }
+
+
 
 
             OutlinedButton(onClick = { navController.navigate("NewItem") },

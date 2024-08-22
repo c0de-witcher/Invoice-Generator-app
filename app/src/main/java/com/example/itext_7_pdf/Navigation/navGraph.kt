@@ -1,5 +1,6 @@
 package com.example.itext_7_pdf.Navigation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavType
@@ -59,7 +60,8 @@ fun nav(
             type = NavType.StringType
         }
         )){
-            itemDetail_View(navController,viewModel,it.arguments?.getString("index"),detail_to_save)
+           Log.i("shivam ","nav index value h ${it.arguments?.getString("index")}")
+           itemDetail_View(navController,viewModel,it.arguments?.getString("index"),detail_to_save,)
 
         }
     }

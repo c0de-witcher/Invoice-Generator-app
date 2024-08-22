@@ -39,7 +39,8 @@ class ViewModel1: ViewModel() {
     var Discount = mutableStateOf("0")
     var Tax_Rate = mutableStateOf("0")
     var Amount = mutableStateOf("0.00")
-    var itemList1 = arrayListOf<itemList>()
+    var itemList1 = arrayListOf<itemList?>()
+    var lock = mutableStateOf(true)
 
     var Edit_Item_Name = mutableStateOf("")
     var Edit_Item_Price = mutableStateOf("0")
@@ -54,13 +55,20 @@ class ViewModel1: ViewModel() {
 
 
     fun asign_value_to_Edit_Item_list(index : Int){
-        Edit_Item_Name.value = itemList1[index].itemName
-        Edit_Item_Price.value = itemList1[index].price
-        Edit_Item_Quantity.value = itemList1[index].Qunantiy
-        Edit_Unit_of_Measure.value = itemList1[index].unit_of_Measure
-        Edit_Discount.value = itemList1[index].Discount
-        Edit_Tax_Rate.value = itemList1[index].Tax_Rate
-        Edit_Amount.value = itemList1[index].total
+        Edit_Item_Name.value = itemList1[index]!!.itemName
+        Edit_Item_Price.value = itemList1[index]!!.price
+        Edit_Item_Quantity.value = itemList1[index]!!.Qunantiy
+        Edit_Unit_of_Measure.value = itemList1[index]!!.unit_of_Measure
+        Edit_Discount.value = itemList1[index]!!.Discount
+        Edit_Tax_Rate.value = itemList1[index]!!.Tax_Rate
+        Edit_Amount.value = itemList1[index]!!.total
+    }
+
+
+    fun deleteDataAtIndex(index: Int){
+        if (index<itemList1.size){
+            itemList1.removeAt(index)
+        }
     }
 
     fun Edit_Cal_Amount(): String{
@@ -71,10 +79,8 @@ class ViewModel1: ViewModel() {
     }
 
     fun replace_item_in_list(index: Int){
-        Log.i("shivam","before ${itemList1.size} index $index")
         itemList1.removeAt(index)
         itemList1.add(index,itemList(Edit_Item_Name.value,Edit_Item_Quantity.value,Edit_Item_Price.value,Edit_Amount.value,Edit_Unit_of_Measure.value,Edit_Discount.value,Edit_Tax_Rate.value))
-        Log.i("shivam","after ${itemList1.size}")
     }
 
 
@@ -114,7 +120,6 @@ class ViewModel1: ViewModel() {
 
 
     fun onDataChange(invo: String,newData: String,detail_to_save: invoice_info_Details){
-        Log.i("shivam "," date ${removeSpaces(invo)} and new data $newData and name ${Business_Name.value}")
         when(removeSpaces(invo)){
             "Business_Website" -> {Business_Website.value = newData}
             "Invoice_Number" -> {Invoice_Number.value= newData }

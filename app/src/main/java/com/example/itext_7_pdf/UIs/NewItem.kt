@@ -27,6 +27,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -35,6 +39,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.navArgument
 import com.example.itext_7_pdf.SharedPreffernce.SharedPrefference
 import com.example.itext_7_pdf.SharedPreffernce.invoice_info_Details
 import com.example.itext_7_pdf.ViewModel.ViewModel1
@@ -58,15 +64,16 @@ fun New_Item(
                 nav_Icon = Icons.Filled.ArrowBack,
                 action_Icon = Icons.Filled.Check
             ) {
-                Log.i("shivam",viewModel.itemList1.size.toString())
 
-                viewModel.addItemInList(viewModel.Item_Name.value,
+                viewModel.addItemInList(
+                    viewModel.Item_Name.value,
                     viewModel.Item_Quantity.value,
                     viewModel.Item_Price.value,
                     viewModel.Amount.value,
                     viewModel.Unit_of_Measure.value,
                     viewModel.Discount.value,
-                    viewModel.Tax_Rate.value)
+                    viewModel.Tax_Rate.value
+                )
 
                 viewModel.Item_Name.value = ""
                 viewModel.Item_Quantity.value = "1"
@@ -76,7 +83,6 @@ fun New_Item(
                 viewModel.Tax_Rate.value = "0"
                 viewModel.Unit_of_Measure.value = ""
                 navController.navigate("create_new_invoice")
-                Log.i("shivam",viewModel.itemList1.size.toString())
 
 
             }
@@ -189,8 +195,11 @@ fun listLayout(
     total: String,
     index: Int,
     viewModel: ViewModel1,
-    navController: NavHostController
+    navController: NavHostController,
+    detail_to_save: invoice_info_Details,
 ) {
+
+
     Surface(modifier = Modifier
         .padding(start = 15.dp, end = 15.dp, top = 7.dp)
         .border(
@@ -199,7 +208,13 @@ fun listLayout(
             RoundedCornerShape(5.dp)
         )
         .clip(RoundedCornerShape(5.dp))
-        .clickable { navController.navigate("listItem/$index") }
+        .clickable {
+            Log.i("shivam ", "nav index value")
+            navController.navigate("listItem/$index")
+            // onDelete()
+
+
+        }
         .fillMaxWidth(),
         color = mydellWhite) {
         Column(horizontalAlignment = Alignment.End, modifier = Modifier.padding(10.dp)) {
@@ -214,6 +229,9 @@ fun listLayout(
 
         }
     }
+
+
+
 }
 
 
