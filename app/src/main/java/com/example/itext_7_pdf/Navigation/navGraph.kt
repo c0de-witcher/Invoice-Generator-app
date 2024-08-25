@@ -56,12 +56,9 @@ fun nav(
             New_Item(navController,viewModel,sharedPrefference,detail_to_save)
         }
 
-        composable("listItem/{index}", arguments = listOf(navArgument("index"){
-            type = NavType.StringType
-        }
-        )){
+        composable("listItem"){
            Log.i("shivam ","nav index value h ${it.arguments?.getString("index")}")
-           itemDetail_View(navController,viewModel,it.arguments?.getString("index"),detail_to_save,)
+           itemDetail_View(navController,viewModel,detail_to_save,)
 
         }
     }

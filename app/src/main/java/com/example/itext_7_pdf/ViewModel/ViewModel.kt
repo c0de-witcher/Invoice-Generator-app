@@ -39,8 +39,8 @@ class ViewModel1: ViewModel() {
     var Discount = mutableStateOf("0")
     var Tax_Rate = mutableStateOf("0")
     var Amount = mutableStateOf("0.00")
-    var itemList1 = arrayListOf<itemList?>()
-    var lock = mutableStateOf(true)
+    var itemList1 = mutableListOf<itemList?>()
+
 
     var Edit_Item_Name = mutableStateOf("")
     var Edit_Item_Price = mutableStateOf("0")
@@ -49,6 +49,18 @@ class ViewModel1: ViewModel() {
     var Edit_Discount = mutableStateOf("0")
     var Edit_Tax_Rate = mutableStateOf("0")
     var Edit_Amount = mutableStateOf("0.00")
+    var index : Int? = null
+    var checkDiscount = mutableStateOf<Boolean>(false)
+    var checkTax = mutableStateOf<Boolean>(false)
+    var checkShipping = mutableStateOf<Boolean>(false)
+
+
+
+    var mainDiscount = mutableStateOf("0")
+    var mainTax = mutableStateOf("0")
+    var mainTaxName = mutableStateOf("")
+    var mainShipping = mutableStateOf("0")
+
 
 
 
@@ -66,9 +78,7 @@ class ViewModel1: ViewModel() {
 
 
     fun deleteDataAtIndex(index: Int){
-        if (index<itemList1.size){
-            itemList1.removeAt(index)
-        }
+        itemList1.removeAt(index)
     }
 
     fun Edit_Cal_Amount(): String{
@@ -149,6 +159,10 @@ class ViewModel1: ViewModel() {
             "Edit_Discount" -> {Edit_Discount.value = newData}
             "Edit_Tax_Rate" -> {Edit_Tax_Rate.value = newData}
             "Edit_Amount" -> {Edit_Amount.value = newData}
+            "D" -> {mainDiscount.value = newData}
+            "S" -> {mainShipping.value = newData}
+            "T" -> {mainTaxName.value = newData}
+            "T_2"->{mainTax.value = newData}
 
 
 
@@ -191,6 +205,10 @@ class ViewModel1: ViewModel() {
             "Edit_Discount" -> { re = Edit_Discount}
             "Edit_Tax_Rate" -> { re = Edit_Tax_Rate}
             "Edit_Amount" -> { re = Edit_Amount}
+            "D" -> {re = mainDiscount}
+            "S" -> {re = mainShipping}
+            "T" -> {re = mainTaxName}
+            "T_2"->{re = mainTax}
 
 
 

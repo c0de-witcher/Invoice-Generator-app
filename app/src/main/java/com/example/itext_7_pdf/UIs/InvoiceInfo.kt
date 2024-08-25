@@ -204,28 +204,30 @@ fun invoiceNumber(
     detail_to_save: invoice_info_Details,
     viewModel: ViewModel1
 ){
-    Text(text = "$invo ", color = Color.Gray, fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 5.dp))
+    Column {
+        Text(text = "$invo ", color = Color.Gray, fontSize = 12.sp, fontWeight = FontWeight.Bold, modifier = Modifier.padding(bottom = 5.dp))
 
-    OutlinedTextField(value = viewModel.CheckValue_For_TextField(invo), onValueChange = {
-       viewModel.onDataChange(invo,it,detail_to_save)
-        Log.i("shivam",viewModel.Invoice_Title.value)
-    },
-        singleLine = true, modifier = Modifier
-            // .border(1.dp, myGrey, RoundedCornerShape(5.dp))
-            .fillMaxWidth()
-            .padding(0.dp)
+        OutlinedTextField(value = viewModel.CheckValue_For_TextField(invo), onValueChange = {
+            viewModel.onDataChange(invo,it,detail_to_save)
+            Log.i("shivam",viewModel.Invoice_Title.value)
+        },
+            singleLine = true, modifier = Modifier
+                // .border(1.dp, myGrey, RoundedCornerShape(5.dp))
+                .fillMaxWidth()
+                .padding(0.dp)
             ,
-       placeholder = { Text(text = invoiceNumber)},
-        colors = OutlinedTextFieldDefaults.colors(
-            focusedTextColor = mytextColor,
-            unfocusedTextColor = mytextColor,
-            focusedBorderColor = Color.Gray,
-            cursorColor = mytextColor,
-            unfocusedPlaceholderColor = Color.Gray,
-            focusedPlaceholderColor = Color.Transparent
+            placeholder = { Text(text = invoiceNumber)},
+            colors = OutlinedTextFieldDefaults.colors(
+                focusedTextColor = mytextColor,
+                unfocusedTextColor = mytextColor,
+                focusedBorderColor = Color.Gray,
+                cursorColor = mytextColor,
+                unfocusedPlaceholderColor = Color.Gray,
+                focusedPlaceholderColor = Color.Transparent
+            )
         )
-    )
 
+    }
 }
 
 

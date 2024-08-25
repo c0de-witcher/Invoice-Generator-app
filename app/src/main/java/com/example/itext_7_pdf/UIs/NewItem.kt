@@ -19,10 +19,12 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Check
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -47,6 +49,9 @@ import com.example.itext_7_pdf.ViewModel.ViewModel1
 import com.example.itext_7_pdf.ui.theme.myWhite
 import com.example.itext_7_pdf.ui.theme.mydellWhite
 import com.example.itext_7_pdf.ui.theme.mytextColor
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
@@ -193,10 +198,10 @@ fun listLayout(
     price: String,
     qunantiy: String,
     total: String,
-    index: Int,
     viewModel: ViewModel1,
     navController: NavHostController,
     detail_to_save: invoice_info_Details,
+    index : Int
 ) {
 
 
@@ -210,7 +215,8 @@ fun listLayout(
         .clip(RoundedCornerShape(5.dp))
         .clickable {
             Log.i("shivam ", "nav index value")
-            navController.navigate("listItem/$index")
+            viewModel.index = index
+            navController.navigate("listItem")
             // onDelete()
 
 
@@ -225,6 +231,8 @@ fun listLayout(
                 }
                 Text(text = " $qunantiy * $$price",fontSize = 12.sp, color = Color.Black)
             }
+
+
             Text(text = "$$total", fontWeight = FontWeight.Bold, color = Color.Black)
 
         }

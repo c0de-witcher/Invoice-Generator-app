@@ -35,10 +35,8 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -51,6 +49,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.DialogHost
 import androidx.navigation.compose.rememberNavController
 import com.example.itext_7_pdf.R
 import com.example.itext_7_pdf.SharedPreffernce.SharedPrefference
@@ -155,10 +154,11 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
 
 
                    if (itemList != null) {
-                       listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,index,viewModel,navController,detail_to_save)
+                       listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,viewModel,navController,detail_to_save,index)
                    }
                }
            }
+
 
 
 
@@ -204,19 +204,114 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
 
 
 
-            ooptions(
-                Title = "Discount",
-                image = R.drawable.flash_sale,
-                icon = Icons.Filled.KeyboardArrowRight,
+
+
+
+
+
+
+
+
+            Button(onClick = {
+                viewModel.checkDiscount.value = true
+
+
+            },modifier = Modifier
+                .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                contentPadding = PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp),
+                shape = RoundedCornerShape(0.dp)
+
+            ) {
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Surface (color = Color.Transparent){
+                        Image(painter = painterResource(id =  R.drawable.flash_sale), contentDescription = "")
+                        Text(text = "Discount", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 40.dp), color = Color.Black)
+                    }
+                    if (true){
+                        Icon(imageVector =Icons.Filled.KeyboardArrowRight, contentDescription = "Enter", tint = Color.Black, modifier = Modifier)
+                    }
+                }
+            }
+            if (viewModel.checkDiscount.value){
+                Dialog_Box(title = "Discount",viewModel,detail_to_save,"Enter Discount","0%",false,"","","D")
+            }
+
+
+/*
+                "Tax Name", "Enter tax name",
                 true,
-                PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp)
-            )
+                "Tax Rate", "0%", "T"
+
+            */
+
+            Button(onClick = {
+                viewModel.checkTax.value = true
+
+            },modifier = Modifier
+                .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                contentPadding = PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp),
+                shape = RoundedCornerShape(0.dp)
+
+            ) {
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Surface (color = Color.Transparent){
+                        Image(painter = painterResource(id =  R.drawable.tax), contentDescription = "")
+                        Text(text = "Tax", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 40.dp), color = Color.Black)
+                    }
+                    if (true){
+                        Icon(imageVector =Icons.Filled.KeyboardArrowRight, contentDescription = "Enter", tint = Color.Black, modifier = Modifier)
+                    }
+                }
+            }
+            if ( viewModel.checkTax.value){
+                Dialog_Box(title ="Tax",viewModel,detail_to_save,"Tax Name","Enter tax name",true,"Tax Amount","","T")
+            }
 
 
 
-            ooptions(Title = "Tax", image = R.drawable.tax, icon = Icons.Filled.KeyboardArrowRight,true,PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp))
+               /* "Shipping Amount", "$0.00",
+                false,
+                "", "", "S"*/
 
-            ooptions(Title = "Shipping", image = R.drawable.fast_delivery, icon = Icons.Filled.KeyboardArrowRight,true,PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp))
+
+
+            Button(onClick = {
+                viewModel.checkShipping.value = true
+
+            },modifier = Modifier
+                .fillMaxWidth(),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Color.Transparent
+                ),
+                contentPadding = PaddingValues(start = 25.dp, end = 20.dp, top = 10.dp, bottom = 10.dp),
+                shape = RoundedCornerShape(0.dp)
+
+            ) {
+
+                Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
+                    Surface (color = Color.Transparent){
+                        Image(painter = painterResource(id =  R.drawable.fast_delivery), contentDescription = "")
+                        Text(text ="Shipping", fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 40.dp), color = Color.Black)
+                    }
+                    if (true){
+                        Icon(imageVector =Icons.Filled.KeyboardArrowRight, contentDescription = "Enter", tint = Color.Black, modifier = Modifier)
+                    }
+                }
+            }
+
+            if (viewModel.checkShipping.value ){
+                Dialog_Box(title ="Shipping",viewModel,detail_to_save,"Shipping Amount","$0.00",false,"","","S")
+            }
+
+
 
 
 
@@ -246,36 +341,10 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
 }
 
 
-@Composable
-fun ooptions(Title :String , image : Int,icon : ImageVector,action_control : Boolean,paddingValues: PaddingValues){
-    var check by remember {
-        mutableStateOf(false)
-    }
-    Button(onClick = { check = true },modifier = Modifier
-        .fillMaxWidth(),
-        colors = ButtonDefaults.buttonColors(
-            containerColor = Color.Transparent
-        ),
-        contentPadding = paddingValues,
-        shape = RoundedCornerShape(0.dp)
 
-    ) {
 
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween, verticalAlignment = Alignment.CenterVertically) {
-            Surface (color = Color.Transparent){
-                Image(painter = painterResource(id = image), contentDescription = "")
-                Text(text = Title, fontWeight = FontWeight.Bold, fontSize = 15.sp, modifier = Modifier.padding(start = 40.dp), color = Color.Black)
-            }
-            if (action_control){
-                Icon(imageVector = icon, contentDescription = "Enter", tint = Color.Black, modifier = Modifier)
-            }
-        }
-    }
 
-    if (check){
-       check =  Dialog_Box(title = Title, check = check)
-    }
-}
+
 
 @Composable
 fun nav_ooptions(Title :String , image : Int,icon : ImageVector,action_control : Boolean,onClick : ()->Unit,paddingValues: PaddingValues){

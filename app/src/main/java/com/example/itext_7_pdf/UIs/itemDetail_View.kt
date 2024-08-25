@@ -26,6 +26,7 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -44,7 +45,6 @@ import com.example.itext_7_pdf.ui.theme.mytextColor
 fun itemDetail_View(
     navController: NavHostController,
     viewModel: ViewModel1,
-    index: String?,
     detail_to_save: invoice_info_Details,
 ) {
     Scaffold (
@@ -52,10 +52,16 @@ fun itemDetail_View(
             TopBar_two_action(navController = navController, Title = "Edit Item", nav_Icon = Icons.Filled.ArrowBack,
             action_Icon = Icons.Outlined.Delete,
                 {
+                    Log.i("shivam","navii")
                     navController.navigate("create_new_invoice")
-                    if (index != null) {
-                        viewModel.itemList1.removeAt(index.toInt())
+                    if (viewModel.index != null) {
+                        Log.i("shivam","hello")
+                        viewModel.deleteDataAtIndex(viewModel.index!!.toInt())
+                        viewModel.index = null
                     }
+
+
+
 
 
 
@@ -73,7 +79,7 @@ fun itemDetail_View(
 
         },Icons.Filled.Check,
                 {
-            viewModel.replace_item_in_list(index!!.toInt())
+            viewModel.replace_item_in_list(viewModel.index!!.toInt())
 
 
                     viewModel.Edit_Item_Name.value = ""
@@ -88,7 +94,7 @@ fun itemDetail_View(
                 })
         }
     ){
-        ItemDetail_view_Content(viewModel,detail_to_save,index)
+        ItemDetail_view_Content(viewModel,detail_to_save,viewModel.index)
 
     }
 }
@@ -97,7 +103,7 @@ fun itemDetail_View(
 fun ItemDetail_view_Content(
     viewModel: ViewModel1,
     detail_to_save: invoice_info_Details,
-    index: String?
+    index: Int?
 ) {
 
 
@@ -108,7 +114,7 @@ fun ItemDetail_view_Content(
 }
 
 @Composable
-fun itemToEdit(viewModel: ViewModel1, detail_to_save: invoice_info_Details, index: String?) {
+fun itemToEdit(viewModel: ViewModel1, detail_to_save: invoice_info_Details, index: Int?) {
     Card (modifier = Modifier
         .fillMaxWidth()
         .verticalScroll(rememberScrollState())
@@ -121,7 +127,7 @@ fun itemToEdit(viewModel: ViewModel1, detail_to_save: invoice_info_Details, inde
         )
     ){
         Column (modifier = Modifier.padding(15.dp, top = 20.dp, end = 15.dp, bottom = 20.dp)){
-            viewModel.asign_value_to_Edit_Item_list(index!!.toInt())
+            viewModel.asign_value_to_Edit_Item_list(index!!)
 
 
             Edit_List_View(
