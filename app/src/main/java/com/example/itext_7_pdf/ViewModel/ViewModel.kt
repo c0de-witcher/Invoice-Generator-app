@@ -12,6 +12,9 @@ import com.example.itext_7_pdf.SharedPreffernce.invoice_info_Details
 import com.example.itext_7_pdf.UIs.convertDate
 import com.example.itext_7_pdf.UIs.itemList
 import com.example.itext_7_pdf.UIs.removeSpaces
+import com.rizzi.bouquet.HorizontalPdfReaderState
+import com.rizzi.bouquet.ResourceType
+import com.rizzi.bouquet.VerticalPdfReaderState
 import java.util.Date
 
 class ViewModel1: ViewModel() {
@@ -168,6 +171,16 @@ class ViewModel1: ViewModel() {
 
         }
     }
+
+
+
+
+    val pdfVerticallReaderState = VerticalPdfReaderState(
+        resource = ResourceType.Remote("https://myreport.altervista.org/Lorem_Ipsum.pdf"),
+        isZoomEnable = true
+    )
+
+
     var re  = mutableStateOf("")
     fun CheckValue_For_TextField(invo: String) : String{
 

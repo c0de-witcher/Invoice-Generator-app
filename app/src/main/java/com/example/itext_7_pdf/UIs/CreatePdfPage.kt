@@ -482,18 +482,7 @@ fun bottombar() {
         tonalElevation = 5.dp
     ){
         Row (horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
-            OutlinedButton(onClick = { /*TODO*/ },
-                modifier = Modifier,
-                shape = RoundedCornerShape(10.dp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = Color.Transparent,
-                    contentColor = Color.Gray
-                ),
-                border = BorderStroke(1.5f.dp, Color.Gray)
 
-            ) {
-                Text(text = "Preview", modifier = Modifier.padding(5.dp), fontWeight = FontWeight.Bold)
-            }
             Button(onClick = { /*TODO*/ },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(

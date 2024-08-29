@@ -14,9 +14,7 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -57,6 +55,7 @@ import com.example.itext_7_pdf.SharedPreffernce.invoice_info_Details
 import com.example.itext_7_pdf.ViewModel.ViewModel1
 import com.example.itext_7_pdf.ui.theme.myBlue
 import com.example.itext_7_pdf.ui.theme.myGreen
+import com.example.itext_7_pdf.ui.theme.myRed
 import com.example.itext_7_pdf.ui.theme.myWhite
 import com.example.itext_7_pdf.ui.theme.mydellWhite
 
@@ -87,7 +86,7 @@ fun HomePAge(
             .fillMaxWidth()
             .padding(top = 70.dp, start = 10.dp)){
             ScreenContent()
-            LIstView(list = LoadDataList)
+            LIstView(list = LoadDataList,viewModel)
 
         }
     }
@@ -99,49 +98,42 @@ fun ScreenContent() {
 
         Row (modifier = Modifier
             .fillMaxWidth()){
-            Card(modifier = Modifier
-                .padding(10.dp)
-                .width(150.dp)
-                .height(120.dp)
-                ,
-                elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = 5.dp,
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = myWhite
-                )) {
-                Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Total Invoice", color = Color.Black, modifier = Modifier.padding(20.dp))
-                    Text(text = "100", fontSize = 30.sp, fontWeight = FontWeight.Bold)
-                }
+            cardvi(title = "Total invoice", body = "100", myRed)
+            cardvi(title = "Total Money", body = "3800", myGreen)
 
-            }
-            Card(modifier = Modifier
-                .padding(10.dp)
-                .width(150.dp)
-                .height(120.dp),
-                elevation = CardDefaults.elevatedCardElevation(
-                    defaultElevation = 5.dp,
-                ),
-                colors = CardDefaults.cardColors(
-                    containerColor = myWhite
-                )) {
-                Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
-                    Text(text = "Total Money", color = Color.Black, modifier = Modifier.padding(20.dp, bottom = 10.dp, top = 20.dp, end = 20.dp))
-                    Text(text = "3800", fontSize = 30.sp,
-                        fontWeight = FontWeight.Bold,
-                        modifier = Modifier.padding(10.dp),
-                        maxLines = 1,
-                        overflow = TextOverflow.Ellipsis,
-                        color = myGreen)
-                }
-
-            }
 
         }
 
 
 }
+
+
+@Composable
+fun cardvi(title: String, body: String, myRed: Color){
+    Card(modifier = Modifier
+        .padding(10.dp)
+        .width(150.dp)
+        .height(120.dp),
+        elevation = CardDefaults.elevatedCardElevation(
+            defaultElevation = 5.dp,
+        ),
+        colors = CardDefaults.cardColors(
+            containerColor = myWhite
+        )) {
+        Column(modifier = Modifier.fillMaxSize(), verticalArrangement = Arrangement.Top, horizontalAlignment = Alignment.CenterHorizontally) {
+            Text(text = title, color = Color.Black, modifier = Modifier.padding(20.dp, bottom = 10.dp, top = 20.dp, end = 20.dp))
+            Text(text = body, fontSize = 30.sp,
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.padding(10.dp),
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis,
+                color = myRed)
+        }
+
+    }
+}
+
+
 
 @SuppressLint("CoroutineCreationDuringComposition")
 @Composable

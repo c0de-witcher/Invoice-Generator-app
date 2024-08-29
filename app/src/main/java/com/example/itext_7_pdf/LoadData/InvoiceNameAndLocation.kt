@@ -1,29 +1,38 @@
 package com.example.itext_7_pdf.LoadData
 
+import android.annotation.SuppressLint
+import android.net.Uri
 import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.itext_7_pdf.R
+import com.example.itext_7_pdf.ViewModel.ViewModel1
 import com.example.itext_7_pdf.ui.theme.myWhite
+import com.rizzi.bouquet.ResourceType
+import com.rizzi.bouquet.VerticalPDFReader
+import com.rizzi.bouquet.rememberVerticalPdfReaderState
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -51,38 +60,66 @@ fun MapAddressToList(file : List<File>?) : List<InvoiceNameAndLocation?>{
 }
 
 @Composable
-fun LIstView(list: List<InvoiceNameAndLocation?>){
-    LazyColumn(modifier = Modifier.fillMaxWidth().padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+fun LIstView(list: List<InvoiceNameAndLocation?>,viewModel1: ViewModel1){
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         items(list){
-            ListLayout(invoiceNameAndLocation = it)
+            ListLayout(invoiceNameAndLocation = it,viewModel1)
         }
     }
 
 }
+@SuppressLint("UnrememberedMutableState")
 @Composable
-fun ListLayout(invoiceNameAndLocation: InvoiceNameAndLocation?) {
-    Box(modifier = Modifier
+fun ListLayout(invoiceNameAndLocation: InvoiceNameAndLocation?, viewModel1: ViewModel1) {
+    var switch4 = remember {
+        mutableStateOf(false)
+    }
 
-        .padding(start = 20.dp, end = 20.dp, top = 2.dp, bottom = 5.dp)
-        .shadow(3.dp, RoundedCornerShape(10.dp))
-        .fillMaxWidth()
-        .clip(
-            RoundedCornerShape(10.dp)
+    Button(onClick = {
+        switch4.value = true
+
+    },
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(start = 20.dp, end = 20.dp, top = 2.dp, bottom = 5.dp),
+        shape = RoundedCornerShape(10.dp),
+        colors = ButtonDefaults.buttonColors(
+            containerColor = myWhite,
+
+        ),
+        elevation = ButtonDefaults.buttonElevation(
+            defaultElevation = 3.dp
+        ),
+        contentPadding = PaddingValues(0.dp)
+
+    ) {
+        Row (modifier = Modifier.fillMaxWidth() , verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
+            Image(painter = painterResource(id = R.drawable.pdf_icon), contentDescription = "pdf Icon", modifier = Modifier.padding(start = 30.dp, end = 20.dp))
+            if (invoiceNameAndLocation != null) {
+                Text(text = invoiceNameAndLocation.FileName,Modifier.padding(20.dp), color = Color.Black)
+            }
+            if (invoiceNameAndLocation != null) {
+                Text(text = invoiceNameAndLocation.Date,Modifier.padding(20.dp), maxLines = 1, overflow = TextOverflow.Ellipsis, color = Color.Black)
+            }
+
+        }
+
+    }
+
+    if (switch4.value){
+        val uri = Uri.parse(invoiceNameAndLocation?.Address ?: null)
+
+        val ste = rememberVerticalPdfReaderState(resource =ResourceType.Local(Uri.parse(
+            invoiceNameAndLocation?.Address ?: "not found")))
+        Log.i("shivam",ste.toString())
+        VerticalPDFReader(
+            state = ste,       //viewModel1.pdfVerticallReaderState,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = Color.Gray)
         )
-        .background(myWhite)
-        .clickable(enabled = true, onClick = {Log.i("shivam ","hello")})
-       , contentAlignment = Alignment.Center ){
-       Row (modifier = Modifier.fillMaxWidth() , verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
-           Image(painter = painterResource(id = R.drawable.pdf_icon), contentDescription = "pdf Icon", modifier = Modifier.padding(start = 30.dp, end = 20.dp))
-           if (invoiceNameAndLocation != null) {
-               Text(text = invoiceNameAndLocation.FileName,Modifier.padding(20.dp))
-           }
-           if (invoiceNameAndLocation != null) {
-               Text(text = invoiceNameAndLocation.Date,Modifier.padding(20.dp), maxLines = 1, overflow = TextOverflow.Ellipsis)
-           }
-
-       }
-
     }
 
 

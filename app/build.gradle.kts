@@ -80,4 +80,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
     //DataStore
     implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+    //pdf render
+    implementation ("io.github.grizzi91:bouquet:1.1.2")
 }
