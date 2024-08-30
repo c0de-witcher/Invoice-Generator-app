@@ -86,7 +86,7 @@ fun HomePAge(
             .fillMaxWidth()
             .padding(top = 70.dp, start = 10.dp)){
             ScreenContent()
-            LIstView(list = LoadDataList,viewModel)
+            LIstView(list = LoadDataList,viewModel,navController)
 
         }
     }

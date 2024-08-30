@@ -42,7 +42,7 @@ class ViewModel1: ViewModel() {
     var Discount = mutableStateOf("0")
     var Tax_Rate = mutableStateOf("0")
     var Amount = mutableStateOf("0.00")
-    var itemList1 = mutableListOf<itemList?>()
+    var itemList1 = arrayListOf<itemList?>()
 
 
     var Edit_Item_Name = mutableStateOf("")
@@ -63,6 +63,24 @@ class ViewModel1: ViewModel() {
     var mainTax = mutableStateOf("0")
     var mainTaxName = mutableStateOf("")
     var mainShipping = mutableStateOf("0")
+
+    //preview
+    var pdf_address = ""
+
+    //sub total
+    var sub_total = "0.00"
+
+
+
+    fun cal_sub_Total() : String{
+        itemList1.forEachIndexed { index, itemList ->
+            if (itemList != null) {
+                sub_total =  (sub_total.toDouble() + itemList.total.toDouble()).toString()
+            }
+        }
+        return sub_total
+    }
+
 
 
 
@@ -175,10 +193,7 @@ class ViewModel1: ViewModel() {
 
 
 
-    val pdfVerticallReaderState = VerticalPdfReaderState(
-        resource = ResourceType.Remote("https://myreport.altervista.org/Lorem_Ipsum.pdf"),
-        isZoomEnable = true
-    )
+
 
 
     var re  = mutableStateOf("")

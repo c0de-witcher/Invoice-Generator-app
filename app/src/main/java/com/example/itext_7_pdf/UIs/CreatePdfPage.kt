@@ -14,7 +14,9 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
@@ -63,16 +65,7 @@ import com.example.itext_7_pdf.ui.theme.myfontGrey
 import com.example.itext_7_pdf.ui.theme.mytextColor
 
 
-@Preview
-@Composable
- fun biew(){
 
-     val context = LocalContext.current
-
-    val sharedPrefference = SharedPrefference(context)
-    var detail_to_save = invoice_info_Details()
-     PageLayout(navController = rememberNavController(), viewModel = ViewModel1(), sharedPrefference =sharedPrefference, detail_to_save = detail_to_save)
- }
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -87,28 +80,28 @@ fun PageLayout(
         containerColor = mydellWhite,
         topBar = {
             TopBar(navController,"New Invoice",Icons.Filled.ArrowBack,Icons.Outlined.Home,
-                {}
+                {})
 
-            )
+
         },
         bottomBar = {
             bottombar()
         }
     ) {
-        LazyColumn(
+
+        Column (
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(start = 15.dp, top = 60.dp, end = 15.dp, bottom = 60.dp),
+                .padding(start = 15.dp, top = 60.dp, end = 15.dp, bottom = 60.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-           item {
-               InoiveNumber(navController,sharedPrefference,detail_to_save,viewModel)
-               template(navController,viewModel)
-               info(navController,viewModel)
-               items(Modifier.padding(15.dp),navController,viewModel,detail_to_save)
-               lastMessage(navController,viewModel)
-           }
+        ){
 
+            InoiveNumber(navController,sharedPrefference,detail_to_save,viewModel)
+            template(navController,viewModel)
+            info(navController,viewModel)
+            items(Modifier.padding(15.dp),navController,viewModel,detail_to_save)
+            lastMessage(navController,viewModel)
         }
     }
 
@@ -153,7 +146,9 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
                    Log.i("shivam ","index $index")
 
 
+
                    if (itemList != null) {
+                       //viewModel.sub_total.value = (viewModel.sub_total.value.toDouble() + itemList.total.toDouble()).toString()
                        listLayout(itemList.itemName,itemList.price,itemList.Qunantiy,itemList.total,viewModel,navController,detail_to_save,index)
                    }
                }
@@ -196,7 +191,7 @@ fun items(modifier: Modifier, navController: NavHostController,viewModel: ViewMo
 
                     ){
                     Text(text = "Sub total", fontWeight = FontWeight.Bold, color = myfontGrey,  modifier = Modifier.padding(start = 10.dp, top = 5.dp, bottom = 5.dp))
-                    Text(text = "$ 0.00", fontWeight = FontWeight.Bold, color = myfontGrey,  modifier = Modifier.padding(end = 10.dp, top = 5.dp, bottom = 5.dp))
+                    Text(text = viewModel.cal_sub_Total(), fontWeight = FontWeight.Bold, color = myfontGrey,  modifier = Modifier.padding(end = 10.dp, top = 5.dp, bottom = 5.dp))
 
                 }
             }

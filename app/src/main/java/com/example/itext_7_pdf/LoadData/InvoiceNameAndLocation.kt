@@ -1,14 +1,10 @@
 package com.example.itext_7_pdf.LoadData
 
 import android.annotation.SuppressLint
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -25,14 +21,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavHostController
 import com.example.itext_7_pdf.R
+import com.example.itext_7_pdf.UIs.pdf_preview
 import com.example.itext_7_pdf.ViewModel.ViewModel1
 import com.example.itext_7_pdf.ui.theme.myWhite
-import com.rizzi.bouquet.ResourceType
-import com.rizzi.bouquet.VerticalPDFReader
-import com.rizzi.bouquet.rememberVerticalPdfReaderState
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.Date
@@ -60,25 +54,35 @@ fun MapAddressToList(file : List<File>?) : List<InvoiceNameAndLocation?>{
 }
 
 @Composable
-fun LIstView(list: List<InvoiceNameAndLocation?>,viewModel1: ViewModel1){
+fun LIstView(
+    list: List<InvoiceNameAndLocation?>,
+    viewModel1: ViewModel1,
+    navController: NavHostController
+){
     LazyColumn(modifier = Modifier
         .fillMaxWidth()
         .padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
         items(list){
-            ListLayout(invoiceNameAndLocation = it,viewModel1)
+            ListLayout(invoiceNameAndLocation = it,viewModel1,navController)
         }
     }
 
 }
 @SuppressLint("UnrememberedMutableState")
 @Composable
-fun ListLayout(invoiceNameAndLocation: InvoiceNameAndLocation?, viewModel1: ViewModel1) {
-    var switch4 = remember {
-        mutableStateOf(false)
-    }
+fun ListLayout(
+    invoiceNameAndLocation: InvoiceNameAndLocation?,
+    viewModel1: ViewModel1,
+    navController: NavHostController
+) {
+
 
     Button(onClick = {
-        switch4.value = true
+        if (invoiceNameAndLocation != null) {
+            viewModel1.pdf_address = invoiceNameAndLocation.Address
+            navController.navigate("pdf_preview")
+        }
+
 
     },
         modifier = Modifier
@@ -107,28 +111,12 @@ fun ListLayout(invoiceNameAndLocation: InvoiceNameAndLocation?, viewModel1: View
         }
 
     }
+    
 
-    if (switch4.value){
-        val uri = Uri.parse(invoiceNameAndLocation?.Address ?: null)
 
-        val ste = rememberVerticalPdfReaderState(resource =ResourceType.Local(Uri.parse(
-            invoiceNameAndLocation?.Address ?: "not found")))
-        Log.i("shivam",ste.toString())
-        VerticalPDFReader(
-            state = ste,       //viewModel1.pdfVerticallReaderState,
-            modifier = Modifier
-                .fillMaxSize()
-                .background(color = Color.Gray)
-        )
-    }
+
 
 
 }
 
-@Preview(showSystemUi = true)
-@Composable
-private fun view() {
-   //ListLayout(it)
-
-}
 

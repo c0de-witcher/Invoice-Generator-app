@@ -17,6 +17,7 @@ import com.example.itext_7_pdf.UIs.New_Item
 import com.example.itext_7_pdf.UIs.PageLayout
 import com.example.itext_7_pdf.UIs.businessInfo
 import com.example.itext_7_pdf.UIs.itemDetail_View
+import com.example.itext_7_pdf.UIs.pdf_preview
 import com.example.itext_7_pdf.ViewModel.ViewModel1
 
 
@@ -59,6 +60,11 @@ fun nav(
         composable("listItem"){
            Log.i("shivam ","nav index value h ${it.arguments?.getString("index")}")
            itemDetail_View(navController,viewModel,detail_to_save,)
+
+        }
+
+        composable("pdf_preview"){
+            pdf_preview(viewModel1 = viewModel, navController)
 
         }
     }
