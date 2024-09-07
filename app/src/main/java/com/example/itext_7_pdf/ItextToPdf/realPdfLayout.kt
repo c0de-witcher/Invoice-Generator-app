@@ -1,7 +1,10 @@
 package com.example.itext_7_pdf.ItextToPdf
 
+import android.annotation.SuppressLint
 import android.content.Context
+import android.util.Log
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.example.itext_7_pdf.SharedPreffernce.SharedPrefference
 import com.example.itext_7_pdf.ViewModel.ViewModel1
@@ -24,23 +27,31 @@ import com.itextpdf.layout.properties.HorizontalAlignment
 import com.itextpdf.layout.properties.Leading
 import com.itextpdf.layout.properties.Property
 import com.itextpdf.layout.properties.TextAlignment
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.launch
 import java.io.File
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun Desgin1(  itemList: ArrayList<itemlist>, viewModel1: ViewModel1){
+fun Desgin1(viewModel1: ViewModel1){
+    Log.i("shivam","Desgin1")
 
     val context  = LocalContext.current
+    val state = rememberCoroutineScope()
 
 
     val fileDir = File(context.getExternalFilesDir(null),"Invoices")
+    var invoice_num : String? = ""
 
 
 
 
     val sharedPrefference = SharedPrefference(context)
-    val invoice_num = sharedPrefference.getData("invoice")
+   state.launch {
+       invoice_num = sharedPrefference.getData("invoice").firstOrNull()
+   }
     val date = LocalDate.now()
     val date_format = DateTimeFormatter.ofPattern("EEE YYYY/MM/DD")
     val formateDate = date.format(date_format)
@@ -73,9 +84,11 @@ fun Desgin1(  itemList: ArrayList<itemlist>, viewModel1: ViewModel1){
 
 
     //Pay Button
-    var sum : Int = 0
-    itemList.forEach{
-        sum = sum + it.SubTotal.toInt()
+    var sum : Double = 0.0
+    viewModel1.itemList1.forEach{
+        if (it != null) {
+            sum = sum + it.total.toDouble()
+        }
     }
     val patLink = Link("Pay $sum ", PdfAction.createURI("www.google.com"))
         .setTextAlignment(TextAlignment.RIGHT)
@@ -158,13 +171,17 @@ fun Desgin1(  itemList: ArrayList<itemlist>, viewModel1: ViewModel1){
     //doc.add(LineSeparaterr())
 
 
-    itemList.forEachIndexed { index, itemlist ->
+    viewModel1.itemList1.forEachIndexed { index, itemlist ->
 
-        t3.addCell(ProductTableCell(Paragraph((index+1).toString()).setTextAlignment(TextAlignment.LEFT)))
-        t3.addCell(ProductTableCell(Paragraph(itemlist.Description).setTextAlignment(TextAlignment.CENTER)))
-        t3.addCell(ProductTableCell(Paragraph(itemlist.Rate).setTextAlignment(TextAlignment.CENTER)))
-        t3.addCell(ProductTableCell(Paragraph(itemlist.Quantity).setTextAlignment(TextAlignment.CENTER)))
-        t3.addCell(ProductTableCell(Paragraph((itemlist.Rate.toInt()*itemlist.Quantity.toInt()).toString()).setTextAlignment(TextAlignment.RIGHT)))
+
+        if (itemlist != null) {
+            t3.addCell(ProductTableCell(Paragraph((index+1).toString()).setTextAlignment(TextAlignment.LEFT)))
+            t3.addCell(ProductTableCell(Paragraph(itemlist.itemName).setTextAlignment(TextAlignment.CENTER)))
+            t3.addCell(ProductTableCell(Paragraph(itemlist.price).setTextAlignment(TextAlignment.CENTER)))
+            t3.addCell(ProductTableCell(Paragraph(itemlist.Qunantiy).setTextAlignment(TextAlignment.CENTER)))
+            t3.addCell(ProductTableCell(Paragraph((itemlist.price.toInt()*itemlist.Qunantiy.toInt()).toString()).setTextAlignment(TextAlignment.RIGHT)))
+        }
+
         doc.add(t3)
 
 

@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.res.Resources
 import android.net.Uri
 import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Share
+import androidx.compose.material.icons.outlined.Delete
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.Scaffold
@@ -42,8 +44,16 @@ fun pdf_preview(viewModel1: ViewModel1, navController: NavHostController, ){
                navController = navController,
                Title = "Preview",
                nav_Icon = Icons.Filled.ArrowBack,
-               action_Icon = Icons.Filled.Share
+               action_Icon = Icons.Outlined.Delete
            ) {
+              val absoultPath = File(viewModel1.pdf_address)
+
+               if (absoultPath.exists()){
+                   if (absoultPath.delete()){
+                       navController.navigate("Home_Screen")
+                   }
+               }
+
 
            }
        }
@@ -53,7 +63,6 @@ fun pdf_preview(viewModel1: ViewModel1, navController: NavHostController, ){
        val ste = rememberVerticalPdfReaderState(resource = ResourceType.Local(uri))
        Surface(modifier = Modifier.fillMaxSize(), color = mydellWhite) {
 
-           Log.i("shivam",uri.toString())
 
            VerticalPDFReader(
                state = ste,

@@ -28,6 +28,9 @@ class MainActivity : ComponentActivity() {
         window.navigationBarColor = myWhite.toArgb()
         window.statusBarColor = myBlue.toArgb()
       val fileDir = File(this.getExternalFilesDir(null),"Invoices")
+        if (!fileDir.exists()){
+            fileDir.mkdir()
+        }
 
         val itemList = arrayListOf<itemlist>()
         itemList.add(itemlist("Boat Rockerz 510","1899","2","3798"))

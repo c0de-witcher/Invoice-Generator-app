@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -38,24 +37,16 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import androidx.navigation.compose.DialogHost
-import androidx.navigation.compose.rememberNavController
 import com.example.itext_7_pdf.ItextToPdf.Desgin1
 import com.example.itext_7_pdf.R
 import com.example.itext_7_pdf.SharedPreffernce.SharedPrefference
@@ -67,7 +58,6 @@ import com.example.itext_7_pdf.ui.theme.myWhite
 import com.example.itext_7_pdf.ui.theme.mydellWhite
 import com.example.itext_7_pdf.ui.theme.myfontGrey
 import com.example.itext_7_pdf.ui.theme.mytextColor
-import java.io.File
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -87,7 +77,7 @@ fun PageLayout(
 
         },
         bottomBar = {
-            bottombar(viewModel,detail_to_save)
+            bottombar(viewModel,detail_to_save,navController)
         }
     ) {
 
@@ -472,7 +462,11 @@ fun template(navController: NavHostController, viewModel: ViewModel1) {
 
 
 @Composable
-fun bottombar(viewModel1: ViewModel1, detail_to_save: invoice_info_Details) {
+fun bottombar(
+    viewModel1: ViewModel1,
+    detail_to_save: invoice_info_Details,
+    navController: NavHostController
+) {
     BottomAppBar (
         containerColor = myWhite,
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp),
@@ -505,7 +499,7 @@ fun bottombar(viewModel1: ViewModel1, detail_to_save: invoice_info_Details) {
         }
         
         if (viewModel1.saveSwitch.value){
-            saveDialog(detail_to_save = detail_to_save , viewModel1 = viewModel1)
+            saveDialog(detail_to_save = detail_to_save , viewModel1 = viewModel1,navController)
             
         }
     }
@@ -514,11 +508,15 @@ fun bottombar(viewModel1: ViewModel1, detail_to_save: invoice_info_Details) {
 
 
 @Composable
-fun saveDialog(detail_to_save: invoice_info_Details,viewModel1: ViewModel1){
+fun saveDialog(
+    detail_to_save: invoice_info_Details,
+    viewModel1: ViewModel1,
+    navController: NavHostController
+){
 
 
 
-    val context = LocalContext.current
+    //val context = LocalContext.current
 
 
 
@@ -556,9 +554,13 @@ fun saveDialog(detail_to_save: invoice_info_Details,viewModel1: ViewModel1){
 
 
         Desgin1(
-            itemList = ,
             viewModel1 = viewModel1
         )
+        navController.navigate("Home_Screen")
+        viewModel1.saveSwitch.value = false
+        viewModel1.finalSaveButton.value= false
+        viewModel1.File_Name.value = ""
+
     }
     
 }

@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -46,7 +48,8 @@ import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
-import com.example.itext_7_pdf.LoadData.LIstView
+import com.example.itext_7_pdf.LoadData.InvoiceNameAndLocation
+import com.example.itext_7_pdf.LoadData.ListLayout
 import com.example.itext_7_pdf.LoadData.MapAddressToList
 import com.example.itext_7_pdf.LoadData.getInvoice
 import com.example.itext_7_pdf.R
@@ -94,10 +97,29 @@ fun HomePAge(
 }
 
 @Composable
+fun LIstView(
+    list: List<InvoiceNameAndLocation?>,
+    viewModel1: ViewModel1,
+    navController: NavHostController
+){
+    LazyColumn(modifier = Modifier
+        .fillMaxWidth()
+        .padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
+        items(list){
+            ListLayout(invoiceNameAndLocation = it,viewModel1,navController)
+        }
+    }
+
+}
+
+
+
+
+@Composable
 fun ScreenContent() {
 
         Row (modifier = Modifier
-            .fillMaxWidth()){
+            .fillMaxWidth(), horizontalArrangement = Arrangement.SpaceEvenly){
             cardvi(title = "Total invoice", body = "100", myRed)
             cardvi(title = "Total Money", body = "3800", myGreen)
 

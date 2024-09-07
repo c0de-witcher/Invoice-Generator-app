@@ -29,6 +29,7 @@ import com.example.itext_7_pdf.ViewModel.ViewModel1
 import com.example.itext_7_pdf.ui.theme.myWhite
 import java.io.File
 import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import java.util.Locale
 
@@ -39,7 +40,7 @@ data class InvoiceNameAndLocation(
 )
 
 fun MapAddressToList(file : List<File>?) : List<InvoiceNameAndLocation?>{
-    val dateFormat = SimpleDateFormat("yyyy/MM/dd ", Locale.getDefault())
+    val dateFormat = SimpleDateFormat("DD-MMM", Locale.getDefault())
     if (file != null) {
 
 
@@ -53,21 +54,7 @@ fun MapAddressToList(file : List<File>?) : List<InvoiceNameAndLocation?>{
 
 }
 
-@Composable
-fun LIstView(
-    list: List<InvoiceNameAndLocation?>,
-    viewModel1: ViewModel1,
-    navController: NavHostController
-){
-    LazyColumn(modifier = Modifier
-        .fillMaxWidth()
-        .padding(top = 40.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-        items(list){
-            ListLayout(invoiceNameAndLocation = it,viewModel1,navController)
-        }
-    }
 
-}
 @SuppressLint("UnrememberedMutableState")
 @Composable
 fun ListLayout(
