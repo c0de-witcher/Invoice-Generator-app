@@ -22,6 +22,7 @@ import androidx.compose.material.icons.filled.AddCircle
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.KeyboardArrowRight
 import androidx.compose.material.icons.outlined.Home
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -37,8 +38,10 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -53,6 +56,7 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.DialogHost
 import androidx.navigation.compose.rememberNavController
+import com.example.itext_7_pdf.ItextToPdf.Desgin1
 import com.example.itext_7_pdf.R
 import com.example.itext_7_pdf.SharedPreffernce.SharedPrefference
 import com.example.itext_7_pdf.SharedPreffernce.invoice_info_Details
@@ -63,9 +67,7 @@ import com.example.itext_7_pdf.ui.theme.myWhite
 import com.example.itext_7_pdf.ui.theme.mydellWhite
 import com.example.itext_7_pdf.ui.theme.myfontGrey
 import com.example.itext_7_pdf.ui.theme.mytextColor
-
-
-
+import java.io.File
 
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
@@ -85,7 +87,7 @@ fun PageLayout(
 
         },
         bottomBar = {
-            bottombar()
+            bottombar(viewModel,detail_to_save)
         }
     ) {
 
@@ -470,15 +472,22 @@ fun template(navController: NavHostController, viewModel: ViewModel1) {
 
 
 @Composable
-fun bottombar() {
+fun bottombar(viewModel1: ViewModel1, detail_to_save: invoice_info_Details) {
     BottomAppBar (
         containerColor = myWhite,
         contentPadding = PaddingValues(start = 20.dp, end = 20.dp),
         tonalElevation = 5.dp
     ){
+        
+
+        
+        
+        
         Row (horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()){
 
-            Button(onClick = { /*TODO*/ },
+            Button(onClick = { 
+               viewModel1.saveSwitch.value = true
+            },
                 shape = RoundedCornerShape(10.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = myBlue
@@ -494,8 +503,68 @@ fun bottombar() {
                 Text(text = "Save", fontWeight = FontWeight.Bold, modifier = Modifier.padding(top = 5.dp, bottom = 5.dp))
             }
         }
+        
+        if (viewModel1.saveSwitch.value){
+            saveDialog(detail_to_save = detail_to_save , viewModel1 = viewModel1)
+            
+        }
     }
 }
+
+
+
+@Composable
+fun saveDialog(detail_to_save: invoice_info_Details,viewModel1: ViewModel1){
+
+
+
+    val context = LocalContext.current
+
+
+
+
+
+    AlertDialog(onDismissRequest = { viewModel1.saveSwitch.value = false}, confirmButton = {
+        Button(onClick = { viewModel1.finalSaveButton.value = true }, colors = ButtonDefaults.buttonColors(
+            containerColor = myBlue
+        )) {
+            Text(text = "Next")
+        }
+    },
+        title = {
+            Text(text = "File Name")
+        },
+        text = {
+            invoiceNumber(invo = "File Name", invoiceNumber = "Enter File Name", detail_to_save = detail_to_save, viewModel = viewModel1 )
+        },
+        containerColor = myWhite,
+        dismissButton = {
+            Button(onClick = { viewModel1.saveSwitch.value = false }, colors = ButtonDefaults.buttonColors(
+                containerColor = myWhite,
+
+            ),
+                border = BorderStroke(1.dp, Color.Black)
+            ) {
+                Text(text = "Cancel", color = Color.Black)
+            }
+        }
+
+
+        )
+
+    if (viewModel1.finalSaveButton.value){
+
+
+        Desgin1(
+            itemList = ,
+            viewModel1 = viewModel1
+        )
+    }
+    
+}
+
+
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

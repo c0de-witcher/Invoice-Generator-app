@@ -1,6 +1,10 @@
 package com.example.itext_7_pdf.ItextToPdf
 
 import android.content.Context
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
+import com.example.itext_7_pdf.SharedPreffernce.SharedPrefference
+import com.example.itext_7_pdf.ViewModel.ViewModel1
 import com.itextpdf.kernel.colors.DeviceRgb
 import com.itextpdf.kernel.geom.PageSize
 import com.itextpdf.kernel.pdf.PdfDocument
@@ -21,9 +25,31 @@ import com.itextpdf.layout.properties.Leading
 import com.itextpdf.layout.properties.Property
 import com.itextpdf.layout.properties.TextAlignment
 import java.io.File
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 
-fun Desgin1(context: Context, director: File, itemList: ArrayList<itemlist>,fileName :String){
-    val file = File(director,"$fileName.pdf")
+@Composable
+fun Desgin1(  itemList: ArrayList<itemlist>, viewModel1: ViewModel1){
+
+    val context  = LocalContext.current
+
+
+    val fileDir = File(context.getExternalFilesDir(null),"Invoices")
+
+
+
+
+    val sharedPrefference = SharedPrefference(context)
+    val invoice_num = sharedPrefference.getData("invoice")
+    val date = LocalDate.now()
+    val date_format = DateTimeFormatter.ofPattern("EEE YYYY/MM/DD")
+    val formateDate = date.format(date_format)
+
+
+
+
+
+    val file = File(fileDir,"${viewModel1.File_Name.value}.pdf")
     val writer = PdfWriter(file)
     val document = PdfDocument(writer)
     val doc = Document(document, PageSize(650f,700f)).apply {
@@ -39,11 +65,11 @@ fun Desgin1(context: Context, director: File, itemList: ArrayList<itemlist>,file
 
     //Invoice Number
     val InvoiceNumber = com.itextpdf.layout.element.Paragraph()
-    InvoiceNumber.add(Text("INVOICE #013223"))
+    InvoiceNumber.add(Text("INVOICE #$invoice_num"))
         .setFontSize(32f)
 
     //Date
-    val Date = toLightText("TUE 2023/12/24")
+    val Date = toLightText(formateDate)
 
 
     //Pay Button
@@ -85,10 +111,10 @@ fun Desgin1(context: Context, director: File, itemList: ArrayList<itemlist>,file
     //pepole info
     val from  = toLightText("From")
     val to = toLightText("To").setTextAlignment(TextAlignment.RIGHT)
-    val senderName = com.itextpdf.layout.element.Paragraph("Adityam Srivastava").setMarginRight(20f)
-    val CustomerName = com.itextpdf.layout.element.Paragraph("Shivam Srivastava").setTextAlignment(TextAlignment.RIGHT).setMarginLeft(20f)
-    val SenderAddress = toLightText("Karol Bhagh, New Delhi, India").setMarginRight(20f)
-    val CustomerAddress = toLightText("Tokyo, Japan").setTextAlignment(TextAlignment.RIGHT).setMarginLeft(20f)
+    val senderName = com.itextpdf.layout.element.Paragraph(viewModel1.Business_Name.value).setMarginRight(20f)
+    val CustomerName = com.itextpdf.layout.element.Paragraph(viewModel1.Client_Name.value).setTextAlignment(TextAlignment.RIGHT).setMarginLeft(20f)
+    val SenderAddress = toLightText(viewModel1.Billing_Address_1.value).setMarginRight(20f)
+    val CustomerAddress = toLightText(viewModel1.Client_Shipping_Address_1.value).setTextAlignment(TextAlignment.RIGHT).setMarginLeft(20f)
 
     //pepole details table
     val t2 = Table(2)

@@ -5,7 +5,10 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.DatePickerState
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.lifecycle.ViewModel
 import com.example.itext_7_pdf.SharedPreffernce.invoice_info_Details
@@ -69,6 +72,16 @@ class ViewModel1: ViewModel() {
 
     //sub total
     var sub_total = "0.00"
+
+    //save Button functionality
+    var saveSwitch = mutableStateOf(false)
+    var File_Name = mutableStateOf("")
+    var finalSaveButton = mutableStateOf(false)
+
+
+
+
+
 
 
 
@@ -184,6 +197,7 @@ class ViewModel1: ViewModel() {
             "S" -> {mainShipping.value = newData}
             "T" -> {mainTaxName.value = newData}
             "T_2"->{mainTax.value = newData}
+            "File_Name" -> {File_Name.value = newData}
 
 
 
@@ -237,6 +251,7 @@ class ViewModel1: ViewModel() {
             "S" -> {re = mainShipping}
             "T" -> {re = mainTaxName}
             "T_2"->{re = mainTax}
+            "File_Name" -> {re = File_Name}
 
 
 
